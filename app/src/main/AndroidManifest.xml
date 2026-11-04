@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-
+    <!-- 读 NSF 走 SAF（ACTION_OPEN_DOCUMENT_TREE）持久授权，不需要任何存储/音频权限。
+         .nsf 不被 MediaStore 识别为音频，READ_MEDIA_AUDIO 无效；
+         targetSdk 34 下 READ_EXTERNAL_STORAGE 会被系统剔除，同样无效，故全部移除。 -->
     <application
         android:extractNativeLibs="true"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
         android:theme="@android:style/Theme.Material.Light.DarkActionBar">
         <activity
             android:name=".MainActivity"

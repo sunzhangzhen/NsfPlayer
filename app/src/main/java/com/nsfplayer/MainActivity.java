@@ -60,14 +60,10 @@ public class MainActivity extends Activity {
         playBtn = findViewById(R.id.play_btn);
         Button prev = findViewById(R.id.prev_btn);
         Button next = findViewById(R.id.next_btn);
-        Button refresh = findViewById(R.id.refresh_btn);
         ImageButton choose = findViewById(R.id.choose_btn);
 
         choose.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { pickFolder(); }
-        });
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { scanFiles(); }
         });
 
         fileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -158,6 +154,16 @@ public class MainActivity extends Activity {
     }
 
     // ---------- 扫描 ----------
+    private boolean treeAlive(Uri tree) {
+        if (tree == null) return false;
+        try {
+            for (android.content.UriPermission p : getContentResolver().getPersistedUriPermissions()) {
+                if (p.getUri().toString().equals(tree.toString()) && p.isReadPermission()) return true;
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
     private File musicDir() {
         File d = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_MUSIC), "NSF");
@@ -165,18 +171,27 @@ public class MainActivity extends Activity {
         return d;
     }
 
+    private String safError = null;
+
     private void scanFiles() {
         nsfFiles.clear();
+        safError = null;
         // 1) 优先用已授权的 SAF 文件夹
         Uri tree = savedTree();
         if (tree != null) {
-            try {
-                List<String> names = listNsfViaSaf(tree);
-                for (String n : names) {
-                    File f = copyDocToCache(tree, n);
-                    if (f != null) nsfFiles.add(f);
+            if (!treeAlive(tree)) {
+                safError = "文件夹授权已失效（重装或清数据后会发生），请重新点击“选择文件夹”按钮。";
+            } else {
+                try {
+                    List<String> names = listNsfViaSaf(tree);
+                    for (String n : names) {
+                        File f = copyDocToCache(tree, n);
+                        if (f != null) nsfFiles.add(f);
+                    }
+                } catch (Exception e) {
+                    safError = "读取授权文件夹失败：" + e.getMessage();
                 }
-            } catch (Exception ignored) {}
+            }
         }
         // 2) 回退：直接扫公共目录（root/旧系统可读时）
         if (nsfFiles.isEmpty()) {
@@ -196,8 +211,15 @@ public class MainActivity extends Activity {
         fileSpinner.setAdapter(ad);
 
         if (nsfFiles.isEmpty()) {
-            statusText.setText("未找到 NSF 文件。\n点“选择音乐文件夹”，选中 Music/NSF 所在目录；"
-                    + "\n或从文件管理器长按 .nsf → 分享 → 本播放器。");
+            if (safError != null) {
+                statusText.setText(safError);
+            } else if (tree == null) {
+                statusText.setText("尚未授权音乐文件夹。\n请点“选择文件夹”按钮，选中存放 .nsf 的目录；"
+                        + "\n或从文件管理器长按 .nsf → 分享 → 本播放器。");
+            } else {
+                statusText.setText("所选文件夹里没有 .nsf 文件。\n换到存放 .nsf 的目录再选一次；"
+                        + "\n或从文件管理器长按 .nsf → 分享 → 本播放器。");
+            }
             currentFileIndex = -1;
         } else {
             statusText.setText("找到 " + nsfFiles.size() + " 个 NSF 文件");
