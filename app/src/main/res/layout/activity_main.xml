@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center_vertical">
+
+            <Spinner
+                android:id="@+id/file_spinner"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="#CCFFFFFF" />
+
+            <Button
+                android:id="@+id/refresh_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="6dp"
+                android:minWidth="0dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="刷新" />
+
+            <ImageButton
+                android:id="@+id/choose_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="6dp"
+                android:background="#CCFFFFFF"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_folder"
+                android:contentDescription="选择音乐文件夹" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textSize="13sp"
+            android:textColor="#FFFFFF"
+            android:shadowColor="#CC000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="3"
+            android:text="准备中..." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="#88000000">
+
+            <TextView
+                android:id="@+id/track_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:shadowColor="#CC000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="4"
+                android:text="未播放" />
+
+            <SeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:max="100" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/prev_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="上一曲" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="播放" />
+
+                <Button
+                    android:id="@+id/next_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="下一曲" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
