@@ -4,6 +4,10 @@
     <!-- 读 NSF 走 SAF（ACTION_OPEN_DOCUMENT_TREE）持久授权，不需要任何存储/音频权限。
          .nsf 不被 MediaStore 识别为音频，READ_MEDIA_AUDIO 无效；
          targetSdk 34 下 READ_EXTERNAL_STORAGE 会被系统剔除，同样无效，故全部移除。 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:extractNativeLibs="true"
         android:allowBackup="true"
@@ -29,5 +33,10 @@
                 <data android:scheme="file" android:mimeType="*/*" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".PlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
     </application>
 </manifest>
